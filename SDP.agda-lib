@@ -1,0 +1,8 @@
+name: SDP
+depend: standard-library
+include: .
+flags:
+  --without-K
+  --safe
+  --hidden-argument-puns
+  -WnoUnsupportedIndexedMatch
