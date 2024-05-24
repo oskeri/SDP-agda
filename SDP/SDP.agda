@@ -1,10 +1,12 @@
 module SDP.SDP where
 
 open import Data.Nat.Base using (ℕ; suc)
+open import Data.Product.Base
 open import Relation.Binary.PropositionalEquality
 open import Relation.Binary.Structures
 open import Algebra.Structures
 
+open import Finite
 open import Monad
 
 private variable
@@ -66,3 +68,14 @@ record SDP {M} (isMonad : Monad M) : Set₁ where
     reward : (x : X t) → Y x → X (suc t) → Val
     -- An aggregation function for values
     measure : M Val → Val
+
+-- Representation of SDP:s with finite and non-empty controls
+
+record Finite-SDP {M} (isMonad : Monad M) : Set₁ where
+  field
+    sdp : SDP isMonad
+
+  open SDP sdp public
+
+  field
+    Y-finite : ∀ {t} → (x : X t) → Σ ℕ λ n → Finite (suc n) (Y x)
