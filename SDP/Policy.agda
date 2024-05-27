@@ -14,7 +14,7 @@ private variable
 -- Policies
 
 Policy : ℕ → Set
-Policy t = (x : X t) → Y x
+Policy t = (x : State t) → Ctrl x
 
 -- Policy sequences
 
@@ -26,7 +26,7 @@ infixr 5 _∷_
 
 -- Computing the value of a policy sequence
 
-val : PolicySeq t n → X t → Val
+val : PolicySeq t n → State t → Val
 val [] x = 𝟘
 val (p ∷ ps) x =
   let y = p x
@@ -35,7 +35,7 @@ val (p ∷ ps) x =
 
 -- Note that Bellman's equality holds definitionally with this definition of val
 
-BellmanEq : (p : Policy t) (ps : PolicySeq (suc t) n) (x : X t)
+BellmanEq : (p : Policy t) (ps : PolicySeq (suc t) n) (x : State t)
           → val (p ∷ ps) x ≡ measure (fmap (reward x (p x) ⊕ₗ val ps) (next x (p x)))
 BellmanEq p ps x = refl
 

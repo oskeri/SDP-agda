@@ -19,7 +19,7 @@ open import Data.Nat.Base
 private variable
   t n : ℕ
 
-sumTrj-⊕ : (p : Policy t) (ps : PolicySeq (suc t) n) (x : X t)
+sumTrj-⊕ : (p : Policy t) (ps : PolicySeq (suc t) n) (x : State t)
          → sumTrj (trj (p ∷ ps) x) ≡ reward x (p x) (next x (p x)) ⊕ val′ ps (next x (p x))
 sumTrj-⊕ p ps x =
   cong₂ _⊕_ (cong (reward x (p x)) (lemma p ps x)) (sym (measure≡id _))
@@ -29,6 +29,6 @@ sumTrj-⊕ p ps x =
   lemma p (p′ ∷ ps) x = refl
 
 
-BellmanEq : (p : Policy t) (ps : PolicySeq (suc t) n) (x : X t)
+BellmanEq : (p : Policy t) (ps : PolicySeq (suc t) n) (x : State t)
           → val′ (p ∷ ps) x ≡ measure (fmap (reward x (p x) ⊕ₗ val′ ps) (next x (p x)))
 BellmanEq p ps x = cong measure (sumTrj-⊕ p ps x)

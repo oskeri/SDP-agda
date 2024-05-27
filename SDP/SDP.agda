@@ -18,11 +18,11 @@ record SDP {M} (isMonad : Monad M) : Set₁ where
 
   field
     -- States
-    X : ℕ → Set
+    State : ℕ → Set
     -- Controls
-    Y : X t → Set
+    Ctrl : State t → Set
     -- Computing the next state(s)
-    next : (x : X t) → Y x → M (X (suc t))
+    next : (x : State t) → Ctrl x → M (State (suc t))
     -- A total preorder of values
     value : Value
 
@@ -30,7 +30,7 @@ record SDP {M} (isMonad : Monad M) : Set₁ where
 
   field
     -- A reward function
-    reward : (x : X t) → Y x → X (suc t) → Val
+    reward : (x : State t) → Ctrl x → State (suc t) → Val
     -- An aggregation function for values
     measure : M Val → Val
 
@@ -43,4 +43,4 @@ record Finite-SDP {M} (isMonad : Monad M) : Set₁ where
   open SDP sdp public
 
   field
-    Y-finite : ∀ {t} → (x : X t) → Σ ℕ λ n → Finite (suc n) (Y x)
+    Ctrl-finite : ∀ {t} → (x : State t) → Σ ℕ λ n → Finite (suc n) (Ctrl x)
