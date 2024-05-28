@@ -14,7 +14,6 @@ open import Data.Nat.Properties
   { Val = ℕ
   ; 𝟘 = 0
   ; _⊕_ = _+_
-  ; Val-monoid = +-0-isMonoid
   ; _≤_ = _≤_
   ; Val-preorder = ≤-isTotalPreorder
   ; ⊕-mon = +-mono-≤

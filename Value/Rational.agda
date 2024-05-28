@@ -13,7 +13,6 @@ open import Data.Rational.Properties
   { Val = ℚ
   ; 𝟘 = 0ℚ
   ; _⊕_ = _+_
-  ; Val-monoid = +-0-isMonoid
   ; _≤_ = _≤_
   ; Val-preorder = ≤-isTotalPreorder
   ; ⊕-mon = +-mono-≤

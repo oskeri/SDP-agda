@@ -18,10 +18,10 @@ record Value : Set₁ where
   field
     Val : Set
 
-    -- Values are a monoid
+    -- There is a zero value
     𝟘 : Val
+    -- There is "addition" for values
     _⊕_ : Val → Val → Val
-    Val-monoid : IsMonoid _≡_ _⊕_ 𝟘
 
     -- Values have a total preorder
     _≤_ : Val → Val → Set

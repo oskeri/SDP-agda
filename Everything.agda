@@ -14,7 +14,7 @@ import Value
 import Monad.Identity
 import Monad.List
 
--- Some value isntances
+-- Some value instances
 
 import Value.Nat
 import Value.Int

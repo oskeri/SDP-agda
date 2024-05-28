@@ -14,7 +14,6 @@ open import Data.Integer.Properties
   { Val = ℤ
   ; 𝟘 = 0ℤ
   ; _⊕_ = _+_
-  ; Val-monoid = +-0-isMonoid
   ; _≤_ = _≤_
   ; Val-preorder = ≤-isTotalPreorder
   ; ⊕-mon = +-mono-≤
