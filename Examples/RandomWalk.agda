@@ -1,3 +1,7 @@
+------------------------------------------------------------------------
+-- The random walk SDP
+------------------------------------------------------------------------
+
 module Examples.RandomWalk where
 
 open import Function.Base
@@ -21,7 +25,8 @@ private variable
   A : Set
 
 
--- This is perhaps not a very interesting example since there is no decision to be made
+-- This is perhaps not a very interesting example since there
+-- is no decision to be made
 
 randomWalkSDP : SDP listMonad
 randomWalkSDP = record
@@ -30,8 +35,8 @@ randomWalkSDP = record
   ; next = λ x _ → next x
   ; value = ℕ-value
   ; reward = λ _ _ → reward
-  -- Taking the sum of the rewards for each possible next step might not make much
-  -- sense, but it also doesn't really matter,
+  -- Taking the sum of the rewards for each possible next step
+  -- might not make much sense, but it also doesn't really matter.
   ; measure = sum
   ; measure-mon = sum-mon
   }
