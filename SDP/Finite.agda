@@ -1,32 +1,29 @@
 open import SDP.SDP
 open import Monad
 
--- Computing optimal extensions of policy sequences of finite SDP:s
+-- Properties of finite SDP:s
 
-module SDP.Extension
+module SDP.Finite
   {M} {isMonad : Monad M}
-  (fsdp : Finite-SDP isMonad) where
+  (fsdp : Finite-SDP isMonad)
+  where
 
 open Finite-SDP fsdp
 
-open import SDP.Policy sdp
-open import Max Val-preorder
 open import Finite
-
-open import Data.Nat.Base hiding (_≤_)
-open import Data.Product.Base hiding (map)
-open import Data.Vec.Base
-open import Data.Vec.Properties
-open import Function.Base
+open import Max Val-preorder
+open import SDP.Policy sdp
 
 open import Relation.Binary.PropositionalEquality
+open import Data.Nat.Base
+open import Data.Vec.Base
+open import Data.Vec.Properties
+open import Data.Product.Base hiding (map)
 
-private variable
-  n t : ℕ
 
 private
-  allCtrls : (x : State t) → Vec (Ctrl x) _
-  allCtrls x = Finite.all (Ctrl-finite x .proj₂)
+  variable
+    t n : ℕ
 
   val′ : (x : State t) (ps : PolicySeq (suc t) n) (y : Ctrl x) → Val
   val′ x ps y = measure (fmap (reward x y ⊕ₗ val ps) (next x y))
@@ -59,3 +56,9 @@ optExtSpec ps p′ x = begin
   where
   open ≤-Reasoning
   open Finite.Finite (Ctrl-finite x .proj₂)
+
+isOptExtFun : optExtFun
+isOptExtFun = record
+  { optExt = optExt
+  ; optExtSpec = optExtSpec
+  }

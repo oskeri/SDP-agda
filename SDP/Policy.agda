@@ -49,6 +49,13 @@ OptPolicySeq {t} {n} ps = (ps′ : PolicySeq t n) → val ps′ ≤ₗ val ps
 OptExt : PolicySeq (suc t) n → Policy t → Set
 OptExt ps p = ∀ p′ → val (p′ ∷ ps) ≤ₗ val (p ∷ ps)
 
+-- The type of functions that compute optimal extensions
+
+record optExtFun : Set where
+  field
+    optExt : PolicySeq (suc t) n → Policy t
+    optExtSpec : (ps : PolicySeq (suc t) n) → OptExt ps (optExt ps)
+
 -- Bellman's optimality principle
 
 Bellman : (p : Policy t) (ps : PolicySeq (suc t) n)
