@@ -13,6 +13,7 @@ import Value
 
 import Monad.Identity
 import Monad.List
+import Monad.SP
 
 -- Some value instances
 
