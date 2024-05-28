@@ -48,7 +48,7 @@ biOptVal t (suc n) (p ∷ ps) x = begin
   val (bi t (suc n)) x ∎
   where
   y = p x
-  p′ = optExt (bi (suc t) n)
   ps′ = bi (suc t) n
+  p′ = optExt ps′
   y′ = p′ x
   open ≤-Reasoning
