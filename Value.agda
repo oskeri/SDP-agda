@@ -21,6 +21,10 @@ record Value : Set₁ where
     _≤_ : Val → Val → Set
     Val-preorder : IsTotalPreorder _≡_ _≤_
 
+    -- _⊕_ is monotone
+    ⊕-mon : ∀ {a b c d} → a ≤ b → c ≤ d
+          → a ⊕ c ≤ b ⊕ d
+
   module ≤-Reasoning = Relation.Binary.Reasoning.Preorder
     (record { Carrier = Val ; _≈_ = _≡_ ; _≲_ = _≤_
             ; isPreorder = IsTotalPreorder.isPreorder Val-preorder })

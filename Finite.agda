@@ -24,8 +24,8 @@ record Finite (n : ℕ) (A : Set) : Set where
 
   -- Get a list of all elements of A
 
-  toVec : Vec A n
-  toVec = map fromFin (allFin _)
+  all : Vec A n
+  all = map fromFin (allFin _)
 
   -- Every element of A is in toVec
 

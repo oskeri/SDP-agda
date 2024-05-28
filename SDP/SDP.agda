@@ -2,6 +2,7 @@ module SDP.SDP where
 
 open import Data.Nat.Base using (ℕ; suc)
 open import Data.Product.Base
+open import Data.Vec.Base
 
 open import Value public
 open import Finite
@@ -9,6 +10,7 @@ open import Monad
 
 private variable
   t n : ℕ
+  A : Set
 
 -- Representations of SDP:s, parameterized over a monad
 
@@ -34,6 +36,11 @@ record SDP {M} (isMonad : Monad M) : Set₁ where
     -- An aggregation function for values
     measure : M Val → Val
 
+    -- Measure is monotone
+    measure-mon : {f g : A → Val}
+                → f ≤ₗ g → (a : M A)
+                → measure (fmap f a) ≤ measure (fmap g a)
+
 -- Representation of SDP:s with finite and non-empty controls
 
 record Finite-SDP {M} (isMonad : Monad M) : Set₁ where
@@ -44,3 +51,8 @@ record Finite-SDP {M} (isMonad : Monad M) : Set₁ where
 
   field
     Ctrl-finite : ∀ {t} → (x : State t) → Σ ℕ λ n → Finite (suc n) (Ctrl x)
+
+  -- A vector containing all controls of a given state
+
+  allCtrls : (x : State t) → Vec (Ctrl x) _
+  allCtrls x = Finite.all (Ctrl-finite x .proj₂)

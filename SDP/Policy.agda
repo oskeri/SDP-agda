@@ -48,3 +48,20 @@ OptPolicySeq {t} {n} ps = (ps′ : PolicySeq t n) → val ps′ ≤ₗ val ps
 
 OptExt : PolicySeq (suc t) n → Policy t → Set
 OptExt ps p = ∀ p′ → val (p′ ∷ ps) ≤ₗ val (p ∷ ps)
+
+-- Bellman's optimality principle
+
+Bellman : (p : Policy t) (ps : PolicySeq (suc t) n)
+        → OptExt ps p → OptPolicySeq ps
+        → OptPolicySeq (p ∷ ps)
+Bellman p ps op ops (p′ ∷ ps′) x = begin
+  val (p′ ∷ ps′) x ≡⟨⟩
+  measure (fmap (reward x (p′ x) ⊕ₗ val ps′) (next x (p′ x)))
+    ≲⟨ measure-mon (λ x′ → ⊕-mon ≤-refl (ops ps′ x′)) (next x (p′ x)) ⟩
+  measure (fmap (reward x (p′ x) ⊕ₗ val ps) (next x (p′ x)))
+    ≡⟨⟩
+  val (p′ ∷ ps) x
+    ≲⟨ op p′ x ⟩
+  val (p ∷ ps) x ∎
+  where
+  open ≤-Reasoning
