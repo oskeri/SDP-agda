@@ -1,9 +1,12 @@
+------------------------------------------------------------------------
+-- Proof of Bellman's equation for the alternative value function val′
+-- when the identity monad is used and measure is the identity function.
+------------------------------------------------------------------------
+
 open import SDP.SDP
 open import Monad.Identity
 open import Relation.Binary.PropositionalEquality
 
--- Proof of Bellman's equation for the alternative value function val′
--- when the identity monad is used and measure is the identity function.
 
 module SDP.BellmanEq
   (sdp : SDP idMonad)

@@ -1,4 +1,6 @@
+------------------------------------------------------------------------
 -- Finite types
+------------------------------------------------------------------------
 
 module Finite where
 
@@ -6,12 +8,7 @@ open import Data.Fin.Base
 open import Data.Nat.Base
 open import Data.Vec.Base
 open import Data.Vec.Properties
-open import Data.Product.Base hiding (map)
 open import Relation.Binary.PropositionalEquality
-
-private variable
-  A : Set
-  n : ℕ
 
 -- Finite types of n elements
 

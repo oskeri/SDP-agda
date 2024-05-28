@@ -1,7 +1,14 @@
+------------------------------------------------------------------------
+-- Computing the maximum value of a function given a vector of arguments
+------------------------------------------------------------------------
+
 open import Relation.Binary.PropositionalEquality
 open import Relation.Binary.Structures
 
-module Max {V : Set} {_≤_ : V → V → Set} (V-preorder : IsTotalPreorder _≡_ _≤_) where
+module Max
+  {V : Set} {_≤_ : V → V → Set}
+  (V-preorder : IsTotalPreorder _≡_ _≤_)
+  where
 
 open import Data.Nat.Base hiding (_≤_)
 open import Data.Vec.Base
@@ -10,7 +17,6 @@ open import Data.Sum.Base
 open import Function.Base
 open import Data.Fin.Base hiding (_≤_)
 
-open import Finite
 open IsTotalPreorder V-preorder
   using (total)
   renaming (refl to ≤-refl; trans to ≤-trans)

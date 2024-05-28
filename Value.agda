@@ -1,3 +1,7 @@
+------------------------------------------------------------------------
+-- The type of values of SDP:s
+------------------------------------------------------------------------
+
 module Value where
 
 open import Relation.Binary.Structures
@@ -13,10 +17,12 @@ private variable
 record Value : Set₁ where
   field
     Val : Set
+
     -- Values are a monoid
     𝟘 : Val
     _⊕_ : Val → Val → Val
     Val-monoid : IsMonoid _≡_ _⊕_ 𝟘
+
     -- Values have a total preorder
     _≤_ : Val → Val → Set
     Val-preorder : IsTotalPreorder _≡_ _≤_
@@ -42,8 +48,6 @@ record Value : Set₁ where
   infix  4 _≤_
   infix  4 _≤ₗ_
 
-  open IsMonoid Val-monoid public
-    using ()
   open IsTotalPreorder Val-preorder public
     using ()
     renaming (refl to ≤-refl; trans to ≤-trans; total to ≤-total)

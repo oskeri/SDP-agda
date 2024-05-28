@@ -1,8 +1,11 @@
+------------------------------------------------------------------------
+-- Solving SDP:s using backwards induction given a function that finds
+-- an optimal policy to extend a policy sequence.
+------------------------------------------------------------------------
+
 open import SDP.SDP
 import SDP.Policy
 open import Monad
-
--- Solving SDP:s using backwards induction
 
 module SDP.BackwardsInduction
   {M} {isMonad : Monad M}

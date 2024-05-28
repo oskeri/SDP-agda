@@ -1,7 +1,9 @@
+------------------------------------------------------------------------
+-- Computing optimal extensions for finite SDP:s
+------------------------------------------------------------------------
+
 open import SDP.SDP
 open import Monad
-
--- Properties of finite SDP:s
 
 module SDP.Finite
   {M} {isMonad : Monad M}

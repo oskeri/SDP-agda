@@ -1,7 +1,14 @@
+------------------------------------------------------------------------
+-- Trajectories
+------------------------------------------------------------------------
+
 open import SDP.SDP
 open import Monad
 
-module SDP.Trajectory {M} {isMonad : Monad M} (sdp : SDP isMonad) where
+module SDP.Trajectory
+  {M} {isMonad : Monad M}
+  (sdp : SDP isMonad)
+  where
 
 open SDP sdp
 
@@ -13,7 +20,6 @@ open import Data.Product.Base
 
 private variable
   t n : ℕ
-
 
 -- Trajectories
 

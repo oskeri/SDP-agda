@@ -1,6 +1,11 @@
+------------------------------------------------------------------------
+-- The list monad
+------------------------------------------------------------------------
+
 module Monad.List where
 
 open import Monad
+
 open import Function.Base
 open import Data.List.Base
 open import Data.List.Properties

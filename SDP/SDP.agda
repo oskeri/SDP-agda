@@ -1,6 +1,10 @@
+------------------------------------------------------------------------
+-- Definition of sequential decision problems
+------------------------------------------------------------------------
+
 module SDP.SDP where
 
-open import Data.Nat.Base using (ℕ; suc)
+open import Data.Nat.Base hiding (_≤_)
 open import Data.Product.Base
 open import Data.Vec.Base
 

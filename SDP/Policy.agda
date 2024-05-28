@@ -1,7 +1,14 @@
+------------------------------------------------------------------------
+-- Policies and policy sequences
+------------------------------------------------------------------------
+
 open import SDP.SDP
 open import Monad
 
-module SDP.Policy {M} {isMonad : Monad M} (sdp : SDP isMonad) where
+module SDP.Policy
+  {M} {isMonad : Monad M}
+  (sdp : SDP isMonad)
+  where
 
 open SDP sdp
 
