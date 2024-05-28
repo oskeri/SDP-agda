@@ -28,3 +28,7 @@ import SDP.Trajectory
 import SDP.BellmanEq
 import SDP.Finite
 import SDP.BackwardsInduction
+
+-- Examples
+
+import Examples.RandomWalk
