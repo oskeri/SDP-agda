@@ -14,6 +14,12 @@ import Value
 import Monad.Identity
 import Monad.List
 
+-- Some value isntances
+
+import Value.Nat
+import Value.Int
+import Value.Rational
+
 -- Definition and properties of SDP:s
 
 import SDP.SDP
