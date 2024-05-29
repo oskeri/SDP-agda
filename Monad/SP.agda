@@ -5,13 +5,16 @@
 module Monad.SP where
 
 open import Monad
+open import Value
 
 open import Function.Base
+open import Data.Integer.Base using (+_)
 open import Data.List.Base
 open import Data.List.Properties
-open import Data.Nat.Base
-open import Data.Nat.Properties
+open import Data.Nat.Base hiding (_/_; _≤_)
+open import Data.Nat.Properties using (*-assoc; +-identityʳ; *-identityʳ)
 open import Data.Product.Base hiding (map)
+open import Data.Rational.Base using (ℚ; 0ℚ; _÷_; _/_) renaming (_+_ to _+ℚ_; _*_ to _*ℚ_)
 open import Relation.Binary.PropositionalEquality
   hiding ([_])
 
@@ -78,21 +81,27 @@ SP-functor = record
   fmap-∘ [] = refl
   fmap-∘ (x ∷ xs) = cong (_ ∷_) (fmap-∘ xs)
 
+open Functor SP-functor
+
 -- fmap distributes over ++
 
 fmap-++ : (xs ys : SP A)
-        → let open Functor SP-functor
-          in fmap f (xs ++ ys) ≡ fmap f xs ++ fmap f ys
+        → fmap f (xs ++ ys) ≡ fmap f xs ++ fmap f ys
 fmap-++ [] ys = refl
 fmap-++ (x ∷ xs) ys = cong (_ ∷_) (fmap-++ xs ys)
 
 -- scaleWeights commutes with fmap
 
 scale-fmap : (w : ℕ) (xs : SP A)
-           → let open Functor SP-functor
-             in  scaleWeights w (fmap f xs) ≡ fmap f (scaleWeights w xs)
+           → scaleWeights w (fmap f xs) ≡ fmap f (scaleWeights w xs)
 scale-fmap w [] = refl
 scale-fmap w (x ∷ xs) = cong (_ ∷_) (scale-fmap w xs)
+
+-- mapping does not change the total weight
+
+fmap-totalWeight : (xs : SP A) → totalWeight xs ≡ totalWeight (fmap f xs)
+fmap-totalWeight [] = refl
+fmap-totalWeight (x ∷ xs) = cong₂ _+_ refl (fmap-totalWeight xs)
 
 -- SP is a monad
 
@@ -108,7 +117,7 @@ SP-monad = record
   ; map∘μ = map∘μ
   }
   where
-  open Functor SP-functor
+
   η : A → SP A
   η x = [ 1 , x ]
 
@@ -162,3 +171,29 @@ SP-monad = record
     fmap f (scaleWeights w xs) ++ fmap f (μ xss)
       ≡⟨ cong₂ _++_ (sym (scale-fmap w xs)) (map∘μ f xss) ⟩
     scaleWeights w (fmap f xs) ++ μ (fmap (fmap f) xss) ∎
+
+-- An "expectation value" function
+
+module EV
+  (val : Value)
+  (open Value.Value val)
+  (ev-helper : ℕ → (ℕ × Val) → Val)
+  (ev-helper-mono : {A : Set} {f g : A → Val}
+                  → f ≤ₗ g → (w w′ : ℕ) (a : A)
+                  → ev-helper w (w′ , f a) ≤ ev-helper w (w′ , g a))
+  where
+
+  ev : SP Val → Val
+  ev xs = foldr _⊕_ 𝟘 (map (ev-helper (totalWeight xs)) xs)
+
+  ev-mono : f ≤ₗ g → (xs : SP A) → ev (fmap f xs) ≤ ev (fmap g xs)
+  ev-mono {A} {f} {g} f≤g xs =
+    subst₂ (λ x y → foldr _⊕_ 𝟘 (map (ev-helper x) (fmap f xs)) ≤ foldr _⊕_ 𝟘 (map (ev-helper y) (fmap g xs)))
+      (fmap-totalWeight xs) (fmap-totalWeight xs)
+      (lemma (totalWeight xs) f≤g xs)
+    where
+    lemma : (w : ℕ) → f ≤ₗ g → (xs : SP A)
+          → foldr _⊕_ 𝟘 (map (ev-helper w) (fmap f xs)) ≤ foldr _⊕_ 𝟘 (map (ev-helper w) (fmap g xs))
+    lemma w f≤g [] = ≤-refl
+    lemma w f≤g ((w′ , x) ∷ xs) =
+      ⊕-mono (ev-helper-mono f≤g w w′ x) (lemma w f≤g xs)
