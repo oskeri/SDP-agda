@@ -38,7 +38,7 @@ randomWalkSDP = record
   -- Taking the sum of the rewards for each possible next step
   -- might not make much sense, but it also doesn't really matter.
   ; measure = sum
-  ; measure-mon = sum-mon
+  ; measure-mono = sum-mon
   }
   where
 
@@ -59,7 +59,7 @@ randomWalkSDP = record
           → (xs : List A)
           → sum (map f xs) ≤ sum (map g xs)
   sum-mon f≤g [] = ≤-refl
-  sum-mon f≤g (x ∷ xs) = ⊕-mon (f≤g x) (sum-mon f≤g xs)
+  sum-mon f≤g (x ∷ xs) = ⊕-mono (f≤g x) (sum-mon f≤g xs)
 
 finite-⊤ : Finite 1 ⊤
 finite-⊤ = record
@@ -98,7 +98,7 @@ val-ps = refl
 trjs : List (Trj 0 4)
 trjs = trj ps zero
 
--- There are 13 trajectories
+-- There are 13 trajectories (as expected)
 
 trjs13 : length trjs ≡ 13
 trjs13 = refl

@@ -38,7 +38,7 @@ biOptVal t (suc n) (p ∷ ps) x = begin
   val (p ∷ ps) x
     ≡⟨⟩
   measure (fmap (reward x y ⊕ₗ val ps) (next x y))
-    ≲⟨ measure-mon (λ x′ → ⊕-mon ≤-refl (biOptVal (suc t) n ps x′)) (next x y) ⟩
+    ≲⟨ measure-mono (λ x′ → ⊕-mono ≤-refl (biOptVal (suc t) n ps x′)) (next x y) ⟩
   measure (fmap (reward x y ⊕ₗ val ps′) (next x y))
     ≡⟨⟩
   val (p ∷ ps′) x

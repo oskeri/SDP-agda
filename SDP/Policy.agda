@@ -71,7 +71,7 @@ Bellman : (p : Policy t) (ps : PolicySeq (suc t) n)
 Bellman p ps op ops (p′ ∷ ps′) x = begin
   val (p′ ∷ ps′) x ≡⟨⟩
   measure (fmap (reward x (p′ x) ⊕ₗ val ps′) (next x (p′ x)))
-    ≲⟨ measure-mon (λ x′ → ⊕-mon ≤-refl (ops ps′ x′)) (next x (p′ x)) ⟩
+    ≲⟨ measure-mono (λ x′ → ⊕-mono ≤-refl (ops ps′ x′)) (next x (p′ x)) ⟩
   measure (fmap (reward x (p′ x) ⊕ₗ val ps) (next x (p′ x)))
     ≡⟨⟩
   val (p′ ∷ ps) x

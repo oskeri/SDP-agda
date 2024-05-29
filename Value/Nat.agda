@@ -16,5 +16,5 @@ open import Data.Nat.Properties
   ; _⊕_ = _+_
   ; _≤_ = _≤_
   ; Val-preorder = ≤-isTotalPreorder
-  ; ⊕-mon = +-mono-≤
+  ; ⊕-mono = +-mono-≤
   }

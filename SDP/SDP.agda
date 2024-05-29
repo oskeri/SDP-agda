@@ -41,9 +41,9 @@ record SDP {M} (isMonad : Monad M) : Set₁ where
     measure : M Val → Val
 
     -- Measure is monotone
-    measure-mon : {f g : A → Val}
-                → f ≤ₗ g → (a : M A)
-                → measure (fmap f a) ≤ measure (fmap g a)
+    measure-mono : {f g : A → Val}
+                 → f ≤ₗ g → (a : M A)
+                 → measure (fmap f a) ≤ measure (fmap g a)
 
 -- Representation of SDP:s with finite and non-empty controls
 
