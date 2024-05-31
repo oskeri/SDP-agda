@@ -11,12 +11,14 @@ open import Function.Base
 open import Data.Integer.Base using (+_)
 open import Data.List.Base
 open import Data.List.Properties
-open import Data.Nat.Base hiding (_/_; _≤_)
-open import Data.Nat.Properties using (*-assoc; +-identityʳ; *-identityʳ)
+open import Data.Nat.Base hiding (_/_) renaming (_≤_ to _≤ⁿ_)
+open import Data.Nat.Properties hiding (≤-refl)
 open import Data.Product.Base hiding (map)
 open import Data.Rational.Base using (ℚ; 0ℚ; _÷_; _/_) renaming (_+_ to _+ℚ_; _*_ to _*ℚ_)
 open import Relation.Binary.PropositionalEquality
   hiding ([_])
+open import Relation.Binary.Bundles
+open import Data.List.Sort
 
 open ≡-Reasoning
 
@@ -30,6 +32,40 @@ private variable
 
 SP : Set → Set
 SP A = List (ℕ × A)
+
+-- Sort by probability
+
+sortLowest : SP A → SP A
+sortLowest {A} xs = sort ord xs
+  where
+  ord : DecTotalOrder _ _ _
+  ord = record
+    { Carrier = ℕ × A
+    ; _≈_ = λ (w , _) (w′ , _) → w ≡ w′
+    ; _≤_ = λ (w , _) (w′ , _) → w ≤ⁿ w′
+    ; isDecTotalOrder = record
+      { isTotalOrder = record
+        { isPartialOrder = record
+          { isPreorder = record
+            { isEquivalence = record
+              { refl = refl
+              ; sym = sym
+              ; trans = trans
+              }
+            ; reflexive = ≤-reflexive
+            ; trans = ≤-trans
+            }
+          ; antisym = ≤-antisym
+          }
+        ; total = λ _ _ → ≤-total _ _
+        }
+      ; _≟_ = λ _ _ → _ ≟ _
+      ; _≤?_ = λ _ _ → _ ≤? _
+      }
+    }
+
+sortHighest : SP A → SP A
+sortHighest xs = reverse (sortLowest xs)
 
 -- The total weight
 
