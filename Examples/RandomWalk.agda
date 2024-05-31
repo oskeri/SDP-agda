@@ -61,14 +61,6 @@ randomWalkSDP = record
   sum-mon f≤g [] = ≤-refl
   sum-mon f≤g (x ∷ xs) = ⊕-mono (f≤g x) (sum-mon f≤g xs)
 
-finite-⊤ : Finite 1 ⊤
-finite-⊤ = record
-  { toFin = λ _ → zero
-  ; fromFin = λ _ → tt
-  ; to∘from = λ { zero → refl }
-  ; from∘to = λ { tt → refl }
-  }
-
 randomWalkFiniteSDP : Finite-SDP listMonad
 randomWalkFiniteSDP = record
   { sdp = randomWalkSDP

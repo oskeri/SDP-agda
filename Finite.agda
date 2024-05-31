@@ -6,6 +6,7 @@ module Finite where
 
 open import Data.Fin.Base
 open import Data.Nat.Base
+open import Data.Unit.Base
 open import Data.Vec.Base
 open import Data.Vec.Properties
 open import Relation.Binary.PropositionalEquality
@@ -28,3 +29,13 @@ record Finite (n : ℕ) (A : Set) : Set where
 
   inAllFin : (a : A) → a ≡ fromFin (lookup (allFin _) (toFin a))
   inAllFin a rewrite lookup-allFin (toFin a) = sym (from∘to a)
+
+-- The unit type is finite (and has one element)
+
+⊤-finite : Finite 1 ⊤
+⊤-finite = record
+  { toFin = λ _ → zero
+  ; fromFin = λ _ → tt
+  ; to∘from = λ { zero → refl }
+  ; from∘to = λ { tt → refl }
+  }
