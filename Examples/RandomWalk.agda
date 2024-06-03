@@ -75,6 +75,8 @@ open import SDP.Policy randomWalkSDP
 open import SDP.Trajectory randomWalkSDP hiding (head)
 open import SDP.BackwardsInduction randomWalkSDP isOptExtFun
 
+-- Showing trajectories
+
 showTrj : Trj t n → String
 showTrj = Show.showTrj show (λ _ → "_")
 

@@ -33,6 +33,7 @@ import SDP.BackwardsInduction
 -- Examples
 
 import Examples.RandomWalk
+import Examples.GenerationDilemma
 
 -- Main
 

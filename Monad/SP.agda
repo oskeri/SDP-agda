@@ -15,12 +15,14 @@ open import Data.List.Base
 open import Data.List.Properties
 open import Data.Nat.Base hiding (_/_) renaming (_≤_ to _≤ⁿ_)
 open import Data.Nat.Properties hiding (≤-refl)
+open import Data.Nat.Show
 open import Data.Product.Base hiding (map)
 open import Data.Rational.Base using (ℚ; 0ℚ; _÷_; _/_) renaming (_+_ to _+ℚ_; _*_ to _*ℚ_)
 open import Relation.Binary.PropositionalEquality
   hiding ([_])
 open import Relation.Binary.Bundles
 open import Data.List.Sort
+open import Data.String.Base hiding (_≤_; show) renaming (_++_ to _<>_)
 
 open ≡-Reasoning
 
@@ -209,6 +211,12 @@ SP-monad = record
     fmap f (scaleWeights w xs) ++ fmap f (μ xss)
       ≡⟨ cong₂ _++_ (sym (scale-fmap w xs)) (map∘μ f xss) ⟩
     scaleWeights w (fmap f xs) ++ μ (fmap (fmap f) xss) ∎
+
+-- Showing the SP monad
+
+showSP : SP String → String
+showSP xs =
+  unlines (map (λ (w , s) → s <> " (" <> show w <> "/" <> show (totalWeight xs) <> ")") xs)
 
 -- An "expectation value" function
 

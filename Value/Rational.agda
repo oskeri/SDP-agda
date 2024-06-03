@@ -10,8 +10,8 @@ open import Value
 
 open import Data.Integer.Base using (1ℤ)
 open import Data.List.Base
-open import Data.Rational.Base public
-open import Data.Rational.Properties
+open import Data.Rational.Base
+open import Data.Rational.Properties hiding (≤-refl)
 open import Data.Rational.Literals
 open import Agda.Builtin.FromNat
 open import Data.Nat.Base using (ℕ; zero; suc)
@@ -56,22 +56,29 @@ avg : List ℚ → ℚ
 avg [] = 0ℚ
 avg qs@(x ∷ xs) = (foldr _+_ 0ℚ qs ÷ ℕ→ℚ (length qs)) ⦃ _ ⦄
 
--- A function that can be used to compute the expecation value from the SP monad
--- see the module EV in Monad.SP.
+module ℚ-EV
+  (val : Value ℚ)
+  (open Value.Value val renaming (_≤_ to _⊑_))
+  (*-monoʳ-⊑ : ∀ (r : ℚ) .⦃ _ : NonNegative r ⦄ {p q} → p ⊑ q → p * r ⊑ q * r)
+  (*-monoˡ-⊑ : ∀ (r : ℚ) .⦃ _ : NonNegative r ⦄ {p q} → p ⊑ q → r * p ⊑ r * q)
+  where
 
--- Note that if the total weight is zero, the expectation value will be zero
+  -- A function that can be used to compute the expecation value from the SP monad
+  -- see the module EV in Monad.SP.
 
-ev-helper : ℕ → (ℕ × ℚ) → ℚ
-ev-helper zero (w , q) = 0ℚ
-ev-helper wₜₒₜ@(suc _) (w , q) = (ℕ→ℚ w * q ÷ ℕ→ℚ wₜₒₜ) ⦃ _ ⦄
+  -- Note that if the total weight is zero, the expectation value will be zero
 
--- The helper function is monotone
+  ev-helper : ℕ → (ℕ × ℚ) → ℚ
+  ev-helper zero (w , q) = 0ℚ
+  ev-helper wₜₒₜ@(suc _) (w , q) = (ℕ→ℚ w * q ÷ ℕ→ℚ wₜₒₜ) ⦃ _ ⦄
 
-ev-helper-mono : (f≤g : (a : A) → f a ≤ g a) (w w′ : ℕ) (a : A)
-               → ev-helper w (w′ , f a) ≤ ev-helper w (w′ , g a)
-ev-helper-mono f≤g zero w′ a = ≤-refl
-ev-helper-mono {f} {g} f≤g (suc w) zero a
-  rewrite *-zeroˡ (f a)
-  rewrite *-zeroˡ (g a) = ≤-refl
-ev-helper-mono f≤g (suc w) (suc w′) a =
-  *-monoʳ-≤-nonNeg (1/ ℕ→ℚ (suc w)) (*-monoˡ-≤-nonNeg (ℕ→ℚ (suc w′)) (f≤g a))
+  -- The helper function is monotone
+
+  ev-helper-mono : (f≤g : f ≤ₗ g) (w w′ : ℕ) (a : A)
+                 → ev-helper w (w′ , f a) ⊑ ev-helper w (w′ , g a)
+  ev-helper-mono f≤g zero w′ a = ≤-refl
+  ev-helper-mono {f} {g} f≤g (suc w) zero a
+    rewrite *-zeroˡ (f a)
+    rewrite *-zeroˡ (g a) = ≤-refl
+  ev-helper-mono f≤g (suc w) (suc w′) a =
+    *-monoʳ-⊑ (1/ ℕ→ℚ (suc w)) (*-monoˡ-⊑ (ℕ→ℚ (suc w′)) (f≤g a))

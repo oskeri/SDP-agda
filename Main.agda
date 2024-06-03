@@ -11,7 +11,11 @@ open import Function.Base
 open import Agda.Builtin.Maybe
 open import Data.Fin.Base
 
+open import Monad
+open import Monad.SP
+
 import Examples.RandomWalk as RW
+import Examples.GenerationDilemma as GD
 
 private variable
   A B : Set
@@ -44,6 +48,16 @@ runRW t n = do
   where
   open RW.Solution t n
 
+runGD : (t n α β : ℕ) → IO ⊤
+runGD t n α β = do
+  let trjs = optTrjs
+  let trjs′ = fmap showTrj trjs
+  putStrLn ("There are " ++ ℕS.show (length trjs) ++ " optimal trajectories starting from GU:")
+  putStrLn (showSP trjs′)
+  where
+  open GD.GD-+ t n α β
+  open Monad.Monad SP-monad
+
 main : IO ⊤
 main = do
   xs ← getArgs
@@ -51,5 +65,9 @@ main = do
     ("rw" ∷ t ∷ n ∷ []) → do
       case (readMaybe 10 t , readMaybe 10 n) of λ where
         (just t′ , just n′) → runRW t′ n′
+        _ → die
+    ("gd" ∷ t ∷ n ∷ α ∷ β ∷ []) → do
+      case (readMaybe 10 t , readMaybe 10 n , readMaybe 10 α , readMaybe 10 β) of λ where
+        (just t′ , just n′ , just α′ , just β′) → runGD t′ n′ α′ β′
         _ → die
     _ → die
