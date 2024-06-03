@@ -32,7 +32,8 @@ record SDP {M} (isMonad : Monad M) : Set₁ where
     -- Computing the next state(s)
     next : (x : State t) → Ctrl x → M (State (suc t))
     -- A total preorder of values
-    value : Value
+    {Val} : Set
+    value : Value Val
 
   open Value.Value value public
 

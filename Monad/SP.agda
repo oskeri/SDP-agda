@@ -213,7 +213,8 @@ SP-monad = record
 -- An "expectation value" function
 
 module EV
-  (val : Value)
+  {Val : Set}
+  (val : Value Val)
   (open Value.Value val)
   (ev-helper : ℕ → (ℕ × Val) → Val)
   (ev-helper-mono : {A : Set} {f g : A → Val}

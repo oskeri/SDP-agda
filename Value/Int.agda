@@ -11,10 +11,9 @@ open import Value
 open import Data.Integer.Base
 open import Data.Integer.Properties
 
-ℕ-value : Value
-ℕ-value = record
-  { Val = ℤ
-  ; 𝟘 = 0ℤ
+ℤ-value : Value ℤ
+ℤ-value = record
+  { 𝟘 = 0ℤ
   ; _⊕_ = _+_
   ; _≤_ = _≤_
   ; Val-preorder = ≤-isTotalPreorder

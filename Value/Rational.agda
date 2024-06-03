@@ -21,18 +21,27 @@ private variable
   A : Set
   f g : A → ℚ
 
---
-
-ℚ-value : Value
-ℚ-value = record
-  { Val = ℚ
-  ; 𝟘 = 0ℚ
-  ; _⊕_ = _+_
+ℚ-value : (_⊕_ : ℚ → ℚ → ℚ) → (∀ {a b c d} → a ≤ b → c ≤ d → (a ⊕ c) ≤ (b ⊕ d))
+        → Value ℚ
+ℚ-value _⊕_ ⊕-mono = record
+  { 𝟘 = 0ℚ
+  ; _⊕_ = _⊕_
   ; _≤_ = _≤_
   ; Val-preorder = ≤-isTotalPreorder
-  ; ⊕-mono = +-mono-≤
+  ; ⊕-mono = ⊕-mono
   }
 
+-- Rationals with normal addition
+
+ℚ-value-+ : Value ℚ
+ℚ-value-+ = ℚ-value _+_ +-mono-≤
+
+-- Rationals where the right argument of _⊕_ is scaled by ½
+
+ℚ-value-+½ : Value ℚ
+ℚ-value-+½ =
+  ℚ-value (λ a b → a + ½ * b) λ a≤b c≤d →
+    +-mono-≤ a≤b (*-monoˡ-≤-nonNeg ½ c≤d)
 
 
 -- Converting natural numbers to rationals

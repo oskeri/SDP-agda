@@ -16,10 +16,8 @@ private variable
 
 -- Values
 
-record Value : Set₁ where
+record Value (Val : Set) : Set₁ where
   field
-    Val : Set
-
     -- There is a zero value
     𝟘 : Val
     -- There is "addition" for values
