@@ -64,7 +64,7 @@ randomWalkSDP = record
 randomWalkFiniteSDP : Finite-SDP listMonad
 randomWalkFiniteSDP = record
   { sdp = randomWalkSDP
-  ; Ctrl-finite = λ _ → _ , finite-⊤
+  ; Ctrl-finite = λ _ → _ , ⊤-finite
   }
 
 open import SDP.Finite randomWalkFiniteSDP
