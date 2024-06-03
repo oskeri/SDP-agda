@@ -1,3 +1,5 @@
+{-# OPTIONS --safe #-}
+
 ------------------------------------------------------------------------
 -- Proof of Bellman's equation for the alternative value function val′
 -- when the identity monad is used and measure is the identity function.

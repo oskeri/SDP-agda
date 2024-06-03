@@ -33,3 +33,7 @@ import SDP.BackwardsInduction
 -- Examples
 
 import Examples.RandomWalk
+
+-- Main
+
+import Main
