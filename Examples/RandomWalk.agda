@@ -6,12 +6,14 @@ module Examples.RandomWalk where
 
 open import Function.Base
 open import Data.Fin.Base hiding (_≤_)
+open import Data.Fin.Show
 open import Data.List.Base hiding ([_])
 open import Data.Maybe.Base hiding (map)
 open import Data.Nat.Base hiding (_≤_)
 open import Data.Unit.Base
 open import Data.Product.Base hiding (map)
 open import Agda.Builtin.Equality
+open import Data.String.Base hiding (_≤_; length; head; show)
 
 open import Finite
 open import Monad.List
@@ -23,7 +25,6 @@ open Value ℕ-value
 private variable
   t n : ℕ
   A : Set
-
 
 -- This is perhaps not a very interesting example since there
 -- is no decision to be made
@@ -72,35 +73,51 @@ open import SDP.Policy randomWalkSDP
 open import SDP.Trajectory randomWalkSDP hiding (head)
 open import SDP.BackwardsInduction randomWalkSDP isOptExtFun
 
--- The optimal policy sequence starting at time 0, going 3 steps
+showTrj : Trj t n → String
+showTrj = Show.showTrj show (λ _ → "_")
 
-ps : PolicySeq 0 3
-ps = bi 0 3
+-- Solve the Random walk SDP for a given time and steps
 
--- The optimal policy sequence is the one always taking the only option
+module Solution (t n : ℕ) where
 
-ps≡ : ps ≡ const tt ∷ const tt ∷ const tt ∷ []
-ps≡ = refl
+  -- The optimal policy sequence starting at time t, going n steps
 
-val-ps : val ps zero ≡ 19
-val-ps = refl
+  optPs : PolicySeq t n
+  optPs = bi t n
 
--- The trajectories of ps
+  -- The trajectories of optPs
 
-trjs : List (Trj 0 4)
-trjs = trj ps zero
+  optTrjs : _ → List (Trj t (suc n))
+  optTrjs x = trj optPs x
 
--- There are 13 trajectories (as expected)
+-- Solve the Random walk SDP for time 0 and 3 steps
 
-trjs13 : length trjs ≡ 13
-trjs13 = refl
+module Solution₀₃ where
 
--- Inspection shows that the trajectories are the expected ones
--- In particular, the first trajectory is the one that stays in zero
+  open Solution 0 3 public
 
-trjs-head : head trjs ≡ just ((zero , _) ∷ (zero , _) ∷ (zero , _) ∷ [ zero ])
-trjs-head = refl
+  -- The optimal policy sequence is the one always taking the only option
 
--- And the last trajectory is the one that always moves one step up
-trjs-last : last trjs ≡ just ((zero , _) ∷ (suc zero , _) ∷ (suc (suc zero) , _) ∷ [ suc (suc (suc zero)) ])
-trjs-last = refl
+  optPs≡ : optPs ≡ const tt ∷ const tt ∷ const tt ∷ []
+  optPs≡ = refl
+
+  val-optPs : val optPs zero ≡ 19
+  val-optPs = refl
+
+  trjs : List (Trj 0 4)
+  trjs = optTrjs zero
+
+  -- There are 13 trajectories (as expected)
+
+  trjs13 : length trjs ≡ 13
+  trjs13 = refl
+
+  -- Inspection shows that the trajectories are the expected ones
+  -- In particular, the first trajectory is the one that stays in zero...
+
+  trjs-head : head trjs ≡ just ((zero , _) ∷ (zero , _) ∷ (zero , _) ∷ [ zero ])
+  trjs-head = refl
+
+  -- ... and the last trajectory is the one that always moves one step up
+  trjs-last : last trjs ≡ just ((zero , _) ∷ (suc zero , _) ∷ (suc (suc zero) , _) ∷ [ suc (suc (suc zero)) ])
+  trjs-last = refl

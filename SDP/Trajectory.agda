@@ -17,6 +17,7 @@ open import SDP.Policy sdp
 open import Function.Base
 open import Data.Nat.Base
 open import Data.Product.Base
+open import Data.String.Base hiding (head)
 
 private variable
   t n : ℕ
@@ -52,3 +53,12 @@ sumTrj ((x , y) ∷ tr) = reward x y (head tr) ⊕ sumTrj tr
 
 val′ : PolicySeq t n → State t → Val
 val′ ps = measure ∘ fmap sumTrj ∘ trj ps
+
+module Show
+  (showState : ∀ {t} → State t → String)
+  (showCtrl : ∀ {t} {x : State t} → Ctrl x → String)
+  where
+
+  showTrj : Trj t n → String
+  showTrj [ x ] = showState x
+  showTrj ((x , y) ∷ t) = showState x ++ " →⟨ " ++ showCtrl y ++ " ⟩ " ++ showTrj t
