@@ -10,6 +10,7 @@ open import Data.Integer.Base using (-[1+_])
 open import Data.List.Base
 open import Data.Product.Base
 open import Data.Rational.Base hiding (_≤_)
+open import Data.Rational.Properties
 open import Data.String.Base hiding (_≤_)
 open import Data.Unit.Base
 open import Agda.Builtin.Equality
@@ -116,11 +117,18 @@ showCtrl {x = BT} tt = "_"
 showCtrl {x = GS} tt = "_"
 
 -- Solving the Generation dilemma SDP at some time and number of
--- steps given weights α and β adding the rewards of each generation.
+-- steps given weights α and β and a value instance for ℚ.
 
-module GD-+ (t n α β : ℕ) where
+module GD
+  (t n α β : ℕ) (ℚ-val : Value ℚ)
+  (*-monoˡ : (r : ℚ) .⦃ _ : NonNegative r ⦄ {p q : ℚ} →
+            (ℚ-val Value.≤ p) q → (ℚ-val Value.≤ r * p) (r * q))
+  (*-monoʳ : (r : ℚ) .⦃ _ : NonNegative r ⦄ {p q : ℚ} →
+            (ℚ-val Value.≤ p) q → (ℚ-val Value.≤ p * r) (q * r))
+  where
 
   -- The reward is only given by the current state
+  -- Arbitrarily chosen to be -10 for bad states and +1 for good states
 
   reward : ∀ {t} → State t → ℚ
   reward GU = 1ℚ
@@ -128,15 +136,13 @@ module GD-+ (t n α β : ℕ) where
   reward BT = -[1+ 9 ] / 1
   reward GS = 1ℚ
 
-  open import Data.Rational.Properties
-
-  params : GD-params ℚ-value-+
+  params : GD-params ℚ-val
   params = record
     { α = α
     ; β = β
     ; reward = λ x y x′ → reward x′
-    ; *-monoʳ-≤ = *-monoʳ-≤-nonNeg
-    ; *-monoˡ-≤ = *-monoˡ-≤-nonNeg
+    ; *-monoʳ-≤ = *-monoʳ
+    ; *-monoˡ-≤ = *-monoˡ
     }
 
   fsdp : Finite-SDP SP-monad
@@ -159,3 +165,14 @@ module GD-+ (t n α β : ℕ) where
 
   optTrjs : SP (Trj t (suc n))
   optTrjs = sortHighest (trj optPs GU)
+
+-- Solving the Generation dilemma SDP at some time and number of
+-- steps given weights α and β where the reward is weighted equally.
+
+module GD-+ (t n α β : ℕ) = GD t n α β ℚ-value-+ *-monoˡ-≤-nonNeg *-monoʳ-≤-nonNeg
+
+-- Solving the Generation dilemma SDP at some time and number of
+-- steps given weights α and β where the reward of each future generation
+-- is given half the importance of the one before.
+
+module GD-+½ (t n α β : ℕ) = GD t n α β ℚ-value-+½ *-monoˡ-≤-nonNeg *-monoʳ-≤-nonNeg

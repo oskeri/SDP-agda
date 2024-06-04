@@ -48,14 +48,24 @@ runRW t n = do
   where
   open RW.Solution t n
 
-runGD : (t n α β : ℕ) → IO ⊤
-runGD t n α β = do
+runGD+ : (t n α β : ℕ) → IO ⊤
+runGD+ t n α β = do
   let trjs = optTrjs
   let trjs′ = fmap showTrj trjs
   putStrLn ("There are " ++ ℕS.show (length trjs) ++ " optimal trajectories starting from GU:")
   putStrLn (showSP trjs′)
   where
   open GD.GD-+ t n α β
+  open Monad.Monad SP-monad
+
+runGD+½ : (t n α β : ℕ) → IO ⊤
+runGD+½ t n α β = do
+  let trjs = optTrjs
+  let trjs′ = fmap showTrj trjs
+  putStrLn ("There are " ++ ℕS.show (length trjs) ++ " optimal trajectories starting from GU:")
+  putStrLn (showSP trjs′)
+  where
+  open GD.GD-+½ t n α β
   open Monad.Monad SP-monad
 
 main : IO ⊤
@@ -66,8 +76,12 @@ main = do
       case (readMaybe 10 t , readMaybe 10 n) of λ where
         (just t′ , just n′) → runRW t′ n′
         _ → die
-    ("gd" ∷ t ∷ n ∷ α ∷ β ∷ []) → do
+    ("gd+" ∷ t ∷ n ∷ α ∷ β ∷ []) → do
       case (readMaybe 10 t , readMaybe 10 n , readMaybe 10 α , readMaybe 10 β) of λ where
-        (just t′ , just n′ , just α′ , just β′) → runGD t′ n′ α′ β′
+        (just t′ , just n′ , just α′ , just β′) → runGD+ t′ n′ α′ β′
+        _ → die
+    ("gd+½" ∷ t ∷ n ∷ α ∷ β ∷ []) → do
+      case (readMaybe 10 t , readMaybe 10 n , readMaybe 10 α , readMaybe 10 β) of λ where
+        (just t′ , just n′ , just α′ , just β′) → runGD+½ t′ n′ α′ β′
         _ → die
     _ → die
