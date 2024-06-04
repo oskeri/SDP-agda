@@ -34,6 +34,7 @@ import SDP.BackwardsInduction
 
 import Examples.RandomWalk
 import Examples.GenerationDilemma
+import Examples.CarCrash
 
 -- Main
 

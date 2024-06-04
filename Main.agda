@@ -16,6 +16,7 @@ open import Monad.SP
 
 import Examples.RandomWalk as RW
 import Examples.GenerationDilemma as GD
+import Examples.CarCrash as CC
 
 private variable
   A B : Set
@@ -58,6 +59,17 @@ runGD+ t n α β = do
   open GD.GD-+ t n α β
   open Monad.Monad SP-monad
 
+
+runCC : (t n : ℕ) → IO ⊤
+runCC t n = do
+  let trjs = optTrjs CC.initial
+  let trjs′ = map CC.showTrj trjs
+  putStrLn ("There are " ++ ℕS.show (length trjs) ++ " optimal trajectories starting from the initial state:")
+  putStrLn (unlines trjs′)
+  where
+  open CC.Solution t n
+
+
 runGD+½ : (t n α β : ℕ) → IO ⊤
 runGD+½ t n α β = do
   let trjs = optTrjs
@@ -83,5 +95,9 @@ main = do
     ("gd+½" ∷ t ∷ n ∷ α ∷ β ∷ []) → do
       case (readMaybe 10 t , readMaybe 10 n , readMaybe 10 α , readMaybe 10 β) of λ where
         (just t′ , just n′ , just α′ , just β′) → runGD+½ t′ n′ α′ β′
+        _ → die
+    ("cc" ∷ t ∷ n ∷ []) → do
+      case (readMaybe 10 t , readMaybe 10 n) of λ where
+        (just t′ , just n′) → runCC t′ n′
         _ → die
     _ → die
