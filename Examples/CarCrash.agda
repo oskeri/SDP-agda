@@ -137,7 +137,7 @@ showHelp nohelp = "×"
 showHelp help = "✓"
 
 showState : State t → String
-showState (b , h) = "B: " ++ showBaby b ++ ", H: " ++ showHelp h
+showState (b , h) = "(B: " ++ showBaby b ++ ", H: " ++ showHelp h ++ ")"
 
 showCtrl : {x : State t} → Ctrl x → String
 showCtrl callForHelp = "call"
