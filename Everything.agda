@@ -48,6 +48,7 @@ import Value.Rational
 
 -- Examples
 -----------
+
 import Examples.RandomWalk
 import Examples.GenerationDilemma
 import Examples.CarCrash

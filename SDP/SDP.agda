@@ -26,7 +26,7 @@ record SDP {M} (isMonad : Monad M) : Set₁ where
 
   field
     -- States
-    State : ℕ → Set
+    State : (t : ℕ) → Set
     -- Controls
     Ctrl : State t → Set
     -- Computing the next state(s)
@@ -57,9 +57,9 @@ record Finite-SDP {M} (isMonad : Monad M) : Set₁ where
   open SDP sdp public
 
   field
-    Ctrl-finite : ∀ {t} → (x : State t) → Σ ℕ λ n → Finite (suc n) (Ctrl x)
+    Ctrl-finite : ∀ {t} → (x : State t) → Σ ℕ (λ n → Finite (suc n) (Ctrl x))
 
   -- A vector containing all controls of a given state
 
-  allCtrls : (x : State t) → Vec (Ctrl x) _
+  allCtrls : (x : State t) → Vec (Ctrl x) (suc (proj₁ (Ctrl-finite x)))
   allCtrls x = Finite.all (Ctrl-finite x .proj₂)
